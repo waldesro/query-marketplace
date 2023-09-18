@@ -1,0 +1,255 @@
+openapi: 3.0.0
+info:
+#  description: Query Marketplace
+  version: "1.0.0"
+  title: Query Marketplace
+  contact:
+    name: Walter de Sola
+    email: waldesro@gmail.com
+servers:
+  - description: local
+    url: 'http://localhost:8080/safari'
+paths:
+  /authorization/v1/authorize:
+    parameters:
+      - $ref: '#/components/parameters/Registration-Key'
+    post:
+      tags:
+        - authorize
+      summary: authenticate user
+      operationId: authorize
+      description: Authorize user to the marketplace
+      responses:
+        '200':
+          $ref: '#/components/responses/200-Authorized'
+        '400':
+          $ref: '#/components/responses/400-UserNotFound'
+        '405':
+          $ref: '#/components/responses/405-InvalidAccountInfo'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthorizationRequest'
+        description: User to authenticate
+  /query/v1/listAll/{softwareId}:
+    parameters:
+      - $ref: '#/components/parameters/SoftwareId'
+    get:
+      tags:
+        - ListAllQueries
+      summary: Return list of queries available for the software
+      description: Return a list with all queries for a given software
+      operationId: listAllQueries
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/200-ListAllQueries'
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+  parameters:
+    Registration-Key:
+      name: Registration-Key
+      description: 'Client Registration key'
+      in: header
+      required: true
+      schema:
+        type: string
+    SoftwareId:
+      name: softwareId
+      in: path
+      description: Software Id
+      required: true
+      schema:
+        type: string
+        format: uuid
+  schemas:
+    AuthorizationRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: user_mail@somedomain.com
+        password:
+          type: string
+          format: password
+          example: abc123
+    AuthorizationResponse:
+      type: object
+      required:
+        - authorizationKey
+        - authorizedTimestamp
+      properties:
+        authorizationKey:
+          type: string
+        authorizedTimestamp:
+          type: string
+          format: date-time
+          example: '2023-12-31T01:00:00.00Z'
+    ErrorsDTO:
+      type: object
+      required:
+        - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDTO'
+    ErrorDTO:
+      type: object
+      description: A single error in the API response
+      required:
+        - code
+        - errorMessage
+        - severity
+      properties:
+        code:
+          type: string
+          description: A unique ID for the particular error
+          example: QMP-A-0001
+        errorMessage:
+          type: string
+          description: Error detail
+          example: Message example for UI feedback
+        severity:
+          type: string
+          description: The severity of the error
+          enum:
+            - INFO
+            - WARNING
+            - ERROR
+          example: ERROR
+    QueryDetailsDTO:
+      type: object
+      description: List of query detail
+      properties:
+        queries:
+          type: array
+          items:
+            $ref: '#/components/schemas/QueryDetailDTO'
+    QueryDetailDTO:
+      type: object
+      description: Query detail
+      required:
+        - id
+        - shortDescription
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Query UUID
+        shortDescription:
+          type: string
+          description: A short description about the query
+          example: Account balance
+        longDescription:
+          type: string
+          description: Long description
+          example: This query provides detail of each account and the balance
+        price: 
+          type: number
+          description: Query price in USA dollars
+          example: 1.99
+          format: double
+        purchased:
+          type: boolean
+          description: Boolean indicating if the query was already purchased by the account
+          example: true
+        author:
+          $ref: '#/components/schemas/AuthorDTO'
+    AuthorDTO:
+      type: object
+      description: Query Author
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Author Id
+        name:
+          type: string
+          description: Author name
+        photo: 
+          type: string
+          description: Path to photo
+        detail:
+          type: string
+          description: Detail information about author
+        profileLink:
+          type: string
+          description: Link to author profile
+        numberOfQueries:
+          type: integer
+          description: Number of queries that author has
+        overallReviewRate:
+          type: number
+          format: float
+          description: Rate author has based on users reviews
+          example: 4.5
+        reviews:
+          type: array
+          description: List of reviews
+          items:
+            $ref: '#/components/schemas/AuthorReviewDTO'
+    AuthorReviewDTO:
+      type: object
+      description: Author review
+      required:
+        - id
+        - reviewComment
+        - rate
+        - date
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Review Id
+        reviewComment:
+          type: string
+          description: Review comments
+        rate:
+          type: number
+          description: Rate
+          format: float
+          example: 4.5
+        date:
+          type: string
+          format: date-time
+          description: Date and Time of review
+  responses:
+    200-Authorized:
+      description: User was Authorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AuthorizationResponse'
+    400-UserNotFound:
+      description: User account not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorsDTO'
+    405-InvalidAccountInfo:
+      description: Invalid account information
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorsDTO'
+    200-ListAllQueries:
+      description: List of all queries
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/QueryDetailsDTO'

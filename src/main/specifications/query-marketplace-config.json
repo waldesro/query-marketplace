@@ -1,0 +1,24 @@
+{
+  "modelPackage": "com.junglesoftware.marketplace.api.dto",
+  "apiPackage": "com.junglesoftware.marketplace.api",
+  "invokerPackage":  "com.junglesoftware.marketplace.api",
+  "unhandledException": true,
+  "serializableModel": true,
+  "useLombok": true,
+  "useBeanValidationWithLombok": true,
+  "delegatePattern": true,
+  "defaultInterfaces": false,
+  "generateHeaders": false,
+  "useBeanValidation": true,
+  "interfaceOnly": true,
+  "implicitHeaders": true,
+  "library": "spring-boot",
+  "useTags": true,
+  "useValidated": true,
+  "generateApiDocumentation": false,
+  "modelDocs": false,
+  "typeMappings": {
+    "Float": "java.math.BigDecimal",
+    "Double": "java.math.BigDecimal"
+  }
+}

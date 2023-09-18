@@ -1,0 +1,35 @@
+#Database Settings
+spring:
+  application:
+    name: Query Market Place
+  jpa:
+    show-sql: true
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc.batch_size: 1000
+      hibernate.cache:
+        use_query_cache: false
+        use_second_level_cache: false
+        use_structured_entries: false
+        use_minimal_puts: false
+  datasource:
+    platform: postgres
+    url: jdbc:postgresql://localhost:5432/query-marketplace
+    username: postgres
+    password: Mikaza146#
+    driverClassName: org.postgresql.Driver
+    tomcat:
+      initial-size: 15
+      max-wait: 20000
+      max-active: 50
+      max-idle: 15
+      default-auto-commit: true
+
+#Server settings
+server:
+  port: 8080
+  context-path: /safari
+  display-name: <a href='/safari'>Query Marketplace API</a>
