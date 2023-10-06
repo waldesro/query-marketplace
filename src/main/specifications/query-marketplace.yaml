@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.0.2
 info:
 #  description: Query Marketplace
   version: "1.0.0"
@@ -7,17 +7,25 @@ info:
     name: Walter de Sola
     email: waldesro@gmail.com
 servers:
-  - description: local
-    url: 'http://localhost:8080/safari'
+  - url: 'http://{environment}.junglesoftware.com'
+    description: Non-Production
+    variables:
+      environment:
+        default: int
+        enum:
+          - int
+          - uat
+  - url: 'https://junglesoftware.com'
+    description: Production
 paths:
-  /authorization/v1/authorize:
+  /authorization/v1/authorizeClient:
     parameters:
       - $ref: '#/components/parameters/Registration-Key'
     post:
       tags:
-        - authorize
+        - authorizeClient
       summary: authenticate user
-      operationId: authorize
+      operationId: authorizeClient
       description: Authorize user to the marketplace
       responses:
         '200':
