@@ -4,9 +4,6 @@ spring:
     name: Query Market Place
   jpa:
     show-sql: true
-    open-in-view: false
-    hibernate:
-      ddl-auto: update
     properties:
       hibernate:
         jdbc.batch_size: 1000
@@ -17,7 +14,7 @@ spring:
         use_minimal_puts: false
   datasource:
     platform: postgres
-    url: jdbc:postgresql://localhost:5432/query-marketplace
+    url: jdbc:postgresql://172.28.128.1:5432/query-marketplace
     username: postgres
     password: Mikaza146#
     driverClassName: org.postgresql.Driver
@@ -30,6 +27,10 @@ spring:
 
 #Server settings
 server:
-  port: 8080
-  context-path: /safari
-  display-name: <a href='/safari'>Query Marketplace API</a>
+  servlet:
+    context-path: /marketplace
+    display-name: <a href='/safari'>Query Marketplace API</a>
+
+openapi:
+  queryMarketplace:
+    base-path: /marketplace

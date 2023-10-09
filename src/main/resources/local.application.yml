@@ -1,0 +1,12 @@
+#Database Settings
+spring:
+  jpa:
+    show-sql: true
+  datasource:
+    url: jdbc:postgresql://172.28.128.1:5432/query-marketplace
+    username: postgres
+    password: Mikaza146#
+
+#Server settings
+server:
+  port: 8080
