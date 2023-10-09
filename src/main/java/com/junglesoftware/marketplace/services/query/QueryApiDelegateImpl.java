@@ -1,15 +1,15 @@
-package com.junglesoftware.marketplace.services;
-
+package com.junglesoftware.marketplace.services.query;
 
 import com.junglesoftware.marketplace.api.QueryApiDelegate;
 import com.junglesoftware.marketplace.dto.QueryDetailDTO;
 import com.junglesoftware.marketplace.dto.QueryDetailsDTO;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-@Service
-public class QueryService implements QueryApiDelegate {
+@Component
+public class QueryApiDelegateImpl implements QueryApiDelegate {
 
     @Override
     public QueryDetailsDTO listAllQueries(UUID softwareId) {

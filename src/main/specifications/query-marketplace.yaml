@@ -1,4 +1,4 @@
-openapi: 3.0.2
+openapi: 3.0.3
 info:
 #  description: Query Marketplace
   version: "1.0.0"
@@ -30,8 +30,8 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/200-Authorized'
-        '400':
-          $ref: '#/components/responses/400-UserNotFound'
+        '404':
+          $ref: '#/components/responses/404-UserNotFound'
         '405':
           $ref: '#/components/responses/405-InvalidAccountInfo'
       requestBody:
@@ -55,6 +55,8 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/200-ListAllQueries'
+        '404':
+          $ref: '#/components/responses/404-ApplicationNotFound'
 components:
   securitySchemes:
     ApiKeyAuth:
@@ -243,7 +245,7 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/AuthorizationResponse'
-    400-UserNotFound:
+    404-UserNotFound:
       description: User account not found
       content:
         application/json:
@@ -261,3 +263,9 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/QueryDetailsDTO'
+    404-ApplicationNotFound:
+      description: Application ID not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorsDTO'
