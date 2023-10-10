@@ -1,11 +1,18 @@
 package com.junglesoftware.marketplace.common.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.junglesoftware.marketplace.common.enumeration.ServiceStatusEnumeration;
+import io.swagger.annotations.ApiModelProperty;
+import org.apache.commons.collections4.CollectionUtils;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-@JsonInclude(Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public abstract class CommonDomainRS {
   @JsonIgnore
   private MessageFactory messageFactory;
@@ -128,16 +135,12 @@ public abstract class CommonDomainRS {
     return false;
   }
 
-  public boolean hasETag() {
-    return StringUtils.isNotEmpty(this.etag);
-  }
 
   protected CommonDomainRS(final CommonDomainRSBuilder<?, ?> b) {
     this.inBody = false;
     this.messageFactory = b.messageFactory;
     this.inBody = b.inBody;
     this.businessMessages = b.businessMessages;
-    this.etag = b.etag;
     this.messages = b.messages;
     this.locale = b.locale;
     this.statusCode = b.statusCode;
@@ -153,10 +156,6 @@ public abstract class CommonDomainRS {
 
   public List<Message> getBusinessMessages() {
     return this.businessMessages;
-  }
-
-  public String getEtag() {
-    return this.etag;
   }
 
   public List<Message> getMessages() {
@@ -181,10 +180,6 @@ public abstract class CommonDomainRS {
 
   public void setBusinessMessages(final List<Message> businessMessages) {
     this.businessMessages = businessMessages;
-  }
-
-  public void setEtag(final String etag) {
-    this.etag = etag;
   }
 
   public void setLocale(final Locale locale) {
@@ -229,20 +224,6 @@ public abstract class CommonDomainRS {
               return false;
             }
           } else if (!this$businessMessages.equals(other$businessMessages)) {
-            return false;
-          }
-
-          label72: {
-            Object this$etag = this.getEtag();
-            Object other$etag = other.getEtag();
-            if (this$etag == null) {
-              if (other$etag == null) {
-                break label72;
-              }
-            } else if (this$etag.equals(other$etag)) {
-              break label72;
-            }
-
             return false;
           }
 
@@ -291,15 +272,12 @@ public abstract class CommonDomainRS {
   }
 
   public int hashCode() {
-    int PRIME = true;
     int result = 1;
     Object $messageFactory = this.getMessageFactory();
     result = result * 59 + ($messageFactory == null ? 43 : $messageFactory.hashCode());
     result = result * 59 + (this.isInBody() ? 79 : 97);
     Object $businessMessages = this.getBusinessMessages();
     result = result * 59 + ($businessMessages == null ? 43 : $businessMessages.hashCode());
-    Object $etag = this.getEtag();
-    result = result * 59 + ($etag == null ? 43 : $etag.hashCode());
     Object $messages = this.getMessages();
     result = result * 59 + ($messages == null ? 43 : $messages.hashCode());
     Object $locale = this.getLocale();
@@ -310,7 +288,7 @@ public abstract class CommonDomainRS {
   }
 
   public String toString() {
-    return "CommonDomainRS(messageFactory=" + this.getMessageFactory() + ", inBody=" + this.isInBody() + ", businessMessages=" + this.getBusinessMessages() + ", etag=" + this.getEtag() + ", messages=" + this.getMessages() + ", locale=" + this.getLocale() + ", statusCode=" + this.getStatusCode() + ")";
+    return "CommonDomainRS(messageFactory=" + this.getMessageFactory() + ", inBody=" + this.isInBody() + ", businessMessages=" + this.getBusinessMessages() + ", messages=" + this.getMessages() + ", locale=" + this.getLocale() + ", statusCode=" + this.getStatusCode() + ")";
   }
 
   public abstract static class CommonDomainRSBuilder<C extends CommonDomainRS, B extends CommonDomainRSBuilder<C, B>> {

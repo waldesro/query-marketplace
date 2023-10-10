@@ -1,7 +1,6 @@
 package com.junglesoftware.marketplace.common.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.junglesoftware.marketplace.common.response.MessageFormat;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;

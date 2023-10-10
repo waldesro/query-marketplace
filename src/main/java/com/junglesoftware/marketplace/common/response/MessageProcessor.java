@@ -1,9 +1,8 @@
 package com.junglesoftware.marketplace.common.response;
 
-import com.erac.services.restframework.domain.exception.ValidationException;
-import com.erac.services.restframework.utils.ExceptionUtils;
-import com.erac.services.restframework.validation.Severity;
-import org.apache.commons.collections.CollectionUtils;
+
+import jakarta.validation.ValidationException;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,9 +26,9 @@ public class MessageProcessor {
 
     List<Message> messages = processConstraintSet(warnings);
 
-    if (CollectionUtils.isNotEmpty(violations)) { 
+    if (CollectionUtils.isNotEmpty(violations)) {
       messages.addAll(processConstraintSet(violations));
-      throw new ValidationException(messages);
+      throw new ValidationException(String.valueOf(messages));
     }
 
     return messages;
@@ -51,9 +50,7 @@ public class MessageProcessor {
     if(violation.getPropertyPath() != null) {
       message.setPath(violation.getPropertyPath().toString());
     }
-    if (message instanceof MessageV1_1) {
-      message.setSeverity(getViolationSeverity(violation));
-    }
+    message.setSeverity(getViolationSeverity(violation));
     return message;
   }
   
