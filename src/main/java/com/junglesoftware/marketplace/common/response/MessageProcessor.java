@@ -1,12 +1,13 @@
 package com.junglesoftware.marketplace.common.response;
 
 
+import com.junglesoftware.marketplace.common.Severity;
+import com.junglesoftware.marketplace.common.utils.ExceptionUtils;
 import jakarta.validation.ValidationException;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.print.attribute.standard.Severity;
 import javax.validation.ConstraintViolation;
 import javax.validation.Payload;
 import javax.validation.metadata.ConstraintDescriptor;

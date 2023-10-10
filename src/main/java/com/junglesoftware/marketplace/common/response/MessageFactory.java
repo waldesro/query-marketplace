@@ -2,12 +2,11 @@ package com.junglesoftware.marketplace.common.response;
 
 
 import com.junglesoftware.marketplace.common.CommonErrors;
+import com.junglesoftware.marketplace.common.Severity;
 import com.junglesoftware.marketplace.common.request.RequestContext;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import javax.print.attribute.standard.Severity;
 
 @Component
 @Data

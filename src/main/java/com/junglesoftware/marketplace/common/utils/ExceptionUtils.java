@@ -1,6 +1,12 @@
 package com.junglesoftware.marketplace.common.utils;
 
 
+import com.junglesoftware.marketplace.common.response.Message;
+import com.junglesoftware.marketplace.common.response.MessageFactory;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;

@@ -18,8 +18,6 @@ public abstract class CommonDomainRS {
   private MessageFactory messageFactory;
   @JsonIgnore
   private boolean inBody;
-  public static final String BUSINESS_MESSAGES_HEADER_FIELD = "Ehi-Messages";
-  public static final String RESPONSE_HEADER_ETAG = "Etag";
   @JsonFormat
   @JsonIgnore
   private List<Message> businessMessages;
