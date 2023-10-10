@@ -1,6 +1,6 @@
 plugins {
 	java
-	id("org.springframework.boot") version "3.2.0-SNAPSHOT"
+	id("org.springframework.boot") version "3.1.4"
 	id("io.spring.dependency-management") version "1.1.3"
 	id("org.openapi.generator") version "7.0.1"
 }
@@ -10,9 +10,6 @@ version = "0.0.1-SNAPSHOT"
 
 java {
 	sourceCompatibility = JavaVersion.VERSION_17
-}
-springBoot {
-	mainClass.set("com.junglesoftware.marketplace.QueryMarketplaceApplication")
 }
 
 configurations {
@@ -36,7 +33,8 @@ dependencies {
 	implementation("org.projectlombok:lombok:1.18.26")
 	implementation("io.swagger.core.v3:swagger-core:2.2.8")
 	implementation("io.swagger.parser.v3:swagger-parser:2.1.14")
-	implementation("io.swagger.core.v3:swagger-annotations:2.2.15")
+	implementation("io.swagger.core.v3:swagger-annotations:2.2.16")
+	implementation("io.swagger.core.v3:swagger-core-jakarta:2.2.16")
 	implementation("org.springdoc:springdoc-openapi-ui:1.7.0")
 	implementation("org.openapitools:jackson-databind-nullable:0.2.6")
 	implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
