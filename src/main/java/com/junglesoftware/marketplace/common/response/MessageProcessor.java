@@ -6,6 +6,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.print.attribute.standard.Severity;
 import javax.validation.ConstraintViolation;
 import javax.validation.Payload;
 import javax.validation.metadata.ConstraintDescriptor;
