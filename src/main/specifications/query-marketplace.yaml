@@ -30,6 +30,10 @@ paths:
       responses:
         200:
           $ref: '#/components/responses/200-Authorized'
+        400:
+          $ref: '#/components/responses/400-BadRequest'
+        401:
+          $ref: '#/components/responses/401-Unauthorized'
         404:
           $ref: '#/components/responses/404-UserNotFound'
         405:
@@ -60,7 +64,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#components/schemas/AccountInfoRequest'
+              $ref: '#/components/schemas/AccountInfoRequest'
   /query/v1/listAll/{softwareId}:
     parameters:
       - $ref: '#/components/parameters/SoftwareId'
@@ -119,6 +123,8 @@ components:
       required:
         - authorizationKey
         - authorizedTimestamp
+      allOf:
+        - '#/components/schemas/CommonDomainRS'
       properties:
         authorizationKey:
           type: string
@@ -126,6 +132,12 @@ components:
           type: string
           format: date-time
           example: '2023-12-31T01:00:00.00Z'
+    CommonDomainRQ:
+      type: object
+      description: Request Context object.
+    CommonDomainRS:
+      type: object
+      description: A common domain object all domain Response objects should implement.
     ErrorsDTO:
       type: object
       required:
@@ -162,6 +174,8 @@ components:
     QueryDetailsDTO:
       type: object
       description: List of query detail
+      allOf:
+        - '#/components/schemas/CommonDomainRS'
       properties:
         queries:
           type: array
@@ -258,6 +272,45 @@ components:
           type: string
           format: date-time
           description: Date and Time of review
+    AccountInfoRequest:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CommonDomainRQ'
+      properties:
+        accountInfo:
+          $ref: '#/components/schemas/AccountInfo'
+    AccountInfo:
+      type: object
+      description: Information about the account
+      required:
+        - user
+        - password
+        - name
+        - software
+        - countryISO
+      properties:
+        user:
+          type: string
+          format: (?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])
+          description: User email
+        password:
+          type: string
+          format: password
+          description: User password
+        name:
+          type: string
+          description: Full name
+        software:
+          type: string
+          description: Software used for ERP
+          enum:
+            - MONICA
+        countryISO:
+          type: string
+          description: Country 3 digits ISO code
+          maxLength: 3
+          minLength: 3
+          example: USA
   responses:
     200-Authorized:
       description: User was Authorized
@@ -265,6 +318,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/AuthorizationResponse'
+    200-AccountCreated:
+      description: Account was successfully created
+    200-ListAllQueries:
+      description: List of all queries
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/QueryDetailsDTO'
     404-UserNotFound:
       description: User account not found
       content:
@@ -277,17 +338,27 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorsDTO'
-    200-ListAllQueries:
-      description: List of all queries
+    402-AccountExists:
+      description: Account could not be created. Existing one
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/QueryDetailsDTO'
+            $ref: '#/components/schemas/ErrorsDTO'
     404-ApplicationNotFound:
       description: Application ID not found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorsDTO'
-    200-AccountCreated:
-      description: Account was successfuly created
+    400-BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorDTO'
+    401-Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorDTO'
