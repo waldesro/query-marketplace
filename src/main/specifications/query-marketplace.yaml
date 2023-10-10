@@ -28,11 +28,11 @@ paths:
       operationId: authorizeClient
       description: Authorize user to the marketplace
       responses:
-        '200':
+        200:
           $ref: '#/components/responses/200-Authorized'
-        '404':
+        404:
           $ref: '#/components/responses/404-UserNotFound'
-        '405':
+        405:
           $ref: '#/components/responses/405-InvalidAccountInfo'
       requestBody:
         required: true
@@ -41,6 +41,26 @@ paths:
             schema:
               $ref: '#/components/schemas/AuthorizationRequest'
         description: User to authenticate
+  /authorization/v1/createAccount:
+    post:
+      tags:
+        - createAccount
+      summary: Create Account
+      operationId: createAccount
+      description: Create Account with required data
+      responses:
+        200:
+          $ref: '#/components/responses/200-AccountCreated'
+        402:
+          $ref: '#/components/responses/402-AccountExists'
+        405:
+          $ref: '#/components/responses/405-InvalidAccountInfo'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/schemas/AccountInfoRequest'
   /query/v1/listAll/{softwareId}:
     parameters:
       - $ref: '#/components/parameters/SoftwareId'
@@ -53,9 +73,9 @@ paths:
       security:
         - ApiKeyAuth: []
       responses:
-        '200':
+        200:
           $ref: '#/components/responses/200-ListAllQueries'
-        '404':
+        404:
           $ref: '#/components/responses/404-ApplicationNotFound'
 components:
   securitySchemes:
@@ -269,3 +289,5 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorsDTO'
+    200-AccountCreated:
+      description: Account was successfuly created

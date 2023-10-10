@@ -1,4 +1,4 @@
-package com.junglesoftware.marketplace.services;
+package com.junglesoftware.marketplace.common;
 
 import org.springframework.web.servlet.support.RequestContext;
 

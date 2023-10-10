@@ -40,8 +40,6 @@ dependencies {
 	implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
 	implementation("javax.validation:validation-api:2.0.1.Final")
 	implementation("javax.annotation:javax.annotation-api:1.3.2")
-	//implementation("org.springframework:spring-webmvc:6.0.11")
-
 
 	compileOnly("jakarta.servlet:jakarta.servlet-api:6.0.0")
 	compileOnly("org.projectlombok:lombok")
