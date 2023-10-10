@@ -16,8 +16,6 @@ public class MessageFactory {
   private RequestContext requestContext;
   @Autowired
   private MessageBundle messageBundle;
-  @Autowired
-  private MessageConfiguration messageConfig;
 
   public Message unknown() {
     return forId(CommonErrors.UNKNOWN_ERROR);

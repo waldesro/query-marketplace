@@ -278,8 +278,8 @@ components:
         - $ref: '#/components/schemas/CommonDomainRQ'
       properties:
         accountInfo:
-          $ref: '#/components/schemas/AccountInfo'
-    AccountInfo:
+          $ref: '#/components/schemas/AccountInfoDTO'
+    AccountInfoDTO:
       type: object
       description: Information about the account
       required:

@@ -40,7 +40,7 @@ dependencies {
 	implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
 	implementation("javax.validation:validation-api:2.0.1.Final")
 	implementation("javax.annotation:javax.annotation-api:1.3.2")
-	implementation("org.apache.commons:org.apache.commons.lang:3.2.0")
+	implementation("org.apache.commons:commons-lang3:3.0")
 	implementation("org.apache.commons:commons-collections4:4.4")
 
 	compileOnly("jakarta.servlet:jakarta.servlet-api:6.0.0")

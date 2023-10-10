@@ -5,6 +5,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.junglesoftware.marketplace.common.enumeration.ServiceStatusEnumeration;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;
@@ -12,6 +17,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+@Data
+@AllArgsConstructor
+@SuperBuilder
+@ToString
+@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public abstract class CommonDomainRS {
   @JsonIgnore
@@ -34,24 +44,24 @@ public abstract class CommonDomainRS {
   @JsonIgnore
   private ServiceStatusEnumeration statusCode;
 
-  public CommonDomainRS() {
+  protected CommonDomainRS() {
     this((List)null);
   }
 
-  public CommonDomainRS(List<Message> messages) {
+  protected CommonDomainRS(List<Message> messages) {
     this.inBody = false;
     this.statusCode = ServiceStatusEnumeration.OK;
-    this.messages = (List)(null == messages ? new ArrayList() : messages);
+    this.messages = (null == messages ? new ArrayList<>() : messages);
   }
 
-  public CommonDomainRS(Message message) {
+  protected CommonDomainRS(Message message) {
     this((List)null);
     this.addError(message);
   }
 
   public void addBusinessMessage(Message message) {
     if (null == this.getBusinessMessages()) {
-      this.businessMessages = new ArrayList();
+      this.businessMessages = new ArrayList<>();
     }
 
     this.businessMessages.add(message);
@@ -64,7 +74,7 @@ public abstract class CommonDomainRS {
 
   public void addBusinessMessages(List<Message> messages) {
     if (null == this.getBusinessMessages()) {
-      this.businessMessages = new ArrayList();
+      this.businessMessages = new ArrayList<>();
     }
 
     if (CollectionUtils.isNotEmpty(messages)) {
@@ -81,7 +91,7 @@ public abstract class CommonDomainRS {
   public void addError(Message message) {
     if (null != message) {
       if (null == this.getMessages()) {
-        this.messages = new ArrayList();
+        this.messages = new ArrayList<>();
       }
 
       this.messages.add(message);
@@ -92,7 +102,7 @@ public abstract class CommonDomainRS {
 
   public void addErrors(List<Message> errors) {
     if (null == this.messages) {
-      this.messages = new ArrayList();
+      this.messages = new ArrayList<>();
     }
 
     if (CollectionUtils.isNotEmpty(errors)) {
@@ -120,10 +130,10 @@ public abstract class CommonDomainRS {
 
   public boolean containsMessageId(String messageId) {
     if (this.messages != null) {
-      Iterator var2 = this.messages.iterator();
+      Iterator<Message> var2 = this.messages.iterator();
 
       while(var2.hasNext()) {
-        Message message = (Message)var2.next();
+        Message message = var2.next();
         if (message.getMessageId() != null && message.getMessageId().equals(messageId)) {
           return true;
         }
@@ -133,216 +143,5 @@ public abstract class CommonDomainRS {
     return false;
   }
 
-
-  protected CommonDomainRS(final CommonDomainRSBuilder<?, ?> b) {
-    this.inBody = false;
-    this.messageFactory = b.messageFactory;
-    this.inBody = b.inBody;
-    this.businessMessages = b.businessMessages;
-    this.messages = b.messages;
-    this.locale = b.locale;
-    this.statusCode = b.statusCode;
-  }
-
-  public MessageFactory getMessageFactory() {
-    return this.messageFactory;
-  }
-
-  public boolean isInBody() {
-    return this.inBody;
-  }
-
-  public List<Message> getBusinessMessages() {
-    return this.businessMessages;
-  }
-
-  public List<Message> getMessages() {
-    return this.messages;
-  }
-
-  public Locale getLocale() {
-    return this.locale;
-  }
-
-  public ServiceStatusEnumeration getStatusCode() {
-    return this.statusCode;
-  }
-
-  public void setMessageFactory(final MessageFactory messageFactory) {
-    this.messageFactory = messageFactory;
-  }
-
-  public void setInBody(final boolean inBody) {
-    this.inBody = inBody;
-  }
-
-  public void setBusinessMessages(final List<Message> businessMessages) {
-    this.businessMessages = businessMessages;
-  }
-
-  public void setLocale(final Locale locale) {
-    this.locale = locale;
-  }
-
-  public void setStatusCode(final ServiceStatusEnumeration statusCode) {
-    this.statusCode = statusCode;
-  }
-
-  public boolean equals(final Object o) {
-    if (o == this) {
-      return true;
-    } else if (!(o instanceof CommonDomainRS)) {
-      return false;
-    } else {
-      CommonDomainRS other = (CommonDomainRS)o;
-      if (!other.canEqual(this)) {
-        return false;
-      } else {
-        label87: {
-          Object this$messageFactory = this.getMessageFactory();
-          Object other$messageFactory = other.getMessageFactory();
-          if (this$messageFactory == null) {
-            if (other$messageFactory == null) {
-              break label87;
-            }
-          } else if (this$messageFactory.equals(other$messageFactory)) {
-            break label87;
-          }
-
-          return false;
-        }
-
-        if (this.isInBody() != other.isInBody()) {
-          return false;
-        } else {
-          Object this$businessMessages = this.getBusinessMessages();
-          Object other$businessMessages = other.getBusinessMessages();
-          if (this$businessMessages == null) {
-            if (other$businessMessages != null) {
-              return false;
-            }
-          } else if (!this$businessMessages.equals(other$businessMessages)) {
-            return false;
-          }
-
-          label65: {
-            Object this$messages = this.getMessages();
-            Object other$messages = other.getMessages();
-            if (this$messages == null) {
-              if (other$messages == null) {
-                break label65;
-              }
-            } else if (this$messages.equals(other$messages)) {
-              break label65;
-            }
-
-            return false;
-          }
-
-          Object this$locale = this.getLocale();
-          Object other$locale = other.getLocale();
-          if (this$locale == null) {
-            if (other$locale != null) {
-              return false;
-            }
-          } else if (!this$locale.equals(other$locale)) {
-            return false;
-          }
-
-          Object this$statusCode = this.getStatusCode();
-          Object other$statusCode = other.getStatusCode();
-          if (this$statusCode == null) {
-            if (other$statusCode != null) {
-              return false;
-            }
-          } else if (!this$statusCode.equals(other$statusCode)) {
-            return false;
-          }
-
-          return true;
-        }
-      }
-    }
-  }
-
-  protected boolean canEqual(final Object other) {
-    return other instanceof CommonDomainRS;
-  }
-
-  public int hashCode() {
-    int result = 1;
-    Object $messageFactory = this.getMessageFactory();
-    result = result * 59 + ($messageFactory == null ? 43 : $messageFactory.hashCode());
-    result = result * 59 + (this.isInBody() ? 79 : 97);
-    Object $businessMessages = this.getBusinessMessages();
-    result = result * 59 + ($businessMessages == null ? 43 : $businessMessages.hashCode());
-    Object $messages = this.getMessages();
-    result = result * 59 + ($messages == null ? 43 : $messages.hashCode());
-    Object $locale = this.getLocale();
-    result = result * 59 + ($locale == null ? 43 : $locale.hashCode());
-    Object $statusCode = this.getStatusCode();
-    result = result * 59 + ($statusCode == null ? 43 : $statusCode.hashCode());
-    return result;
-  }
-
-  public String toString() {
-    return "CommonDomainRS(messageFactory=" + this.getMessageFactory() + ", inBody=" + this.isInBody() + ", businessMessages=" + this.getBusinessMessages() + ", messages=" + this.getMessages() + ", locale=" + this.getLocale() + ", statusCode=" + this.getStatusCode() + ")";
-  }
-
-  public abstract static class CommonDomainRSBuilder<C extends CommonDomainRS, B extends CommonDomainRSBuilder<C, B>> {
-    private MessageFactory messageFactory;
-    private boolean inBody;
-    private List<Message> businessMessages;
-    private String etag;
-    private List<Message> messages;
-    private Locale locale;
-    private ServiceStatusEnumeration statusCode;
-
-    public CommonDomainRSBuilder() {
-    }
-
-    protected abstract B self();
-
-    public abstract C build();
-
-    public B messageFactory(final MessageFactory messageFactory) {
-      this.messageFactory = messageFactory;
-      return this.self();
-    }
-
-    public B inBody(final boolean inBody) {
-      this.inBody = inBody;
-      return this.self();
-    }
-
-    public B businessMessages(final List<Message> businessMessages) {
-      this.businessMessages = businessMessages;
-      return this.self();
-    }
-
-    public B etag(final String etag) {
-      this.etag = etag;
-      return this.self();
-    }
-
-    public B messages(final List<Message> messages) {
-      this.messages = messages;
-      return this.self();
-    }
-
-    public B locale(final Locale locale) {
-      this.locale = locale;
-      return this.self();
-    }
-
-    public B statusCode(final ServiceStatusEnumeration statusCode) {
-      this.statusCode = statusCode;
-      return this.self();
-    }
-
-    public String toString() {
-      return "CommonDomainRS.CommonDomainRSBuilder(messageFactory=" + this.messageFactory + ", inBody=" + this.inBody + ", businessMessages=" + this.businessMessages + ", etag=" + this.etag + ", messages=" + this.messages + ", locale=" + this.locale + ", statusCode=" + this.statusCode + ")";
-    }
-  }
 }
 

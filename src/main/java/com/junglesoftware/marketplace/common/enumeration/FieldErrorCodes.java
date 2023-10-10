@@ -1,6 +1,6 @@
 package com.junglesoftware.marketplace.common.enumeration;
 
-import com.erac.services.restframework.domain.CommonErrors;
+import com.junglesoftware.marketplace.common.CommonErrors;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.validation.FieldError;

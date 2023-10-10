@@ -1,4 +1,4 @@
-package com.junglesoftware.marketplace.controller;
+package com.junglesoftware.marketplace;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
