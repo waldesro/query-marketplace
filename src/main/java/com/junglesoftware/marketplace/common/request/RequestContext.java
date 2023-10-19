@@ -2,7 +2,7 @@ package com.junglesoftware.marketplace.common.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import org.jose4j.jwt.JwtClaims;
+import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
@@ -44,5 +44,5 @@ public class RequestContext {
   private Map<String, Object> customData = new HashMap<>();
 
   @JsonIgnore
-  private JwtClaims jwtClaims;
+  private JwtClaimsSet jwtClaims;
 }

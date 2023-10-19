@@ -1,8 +1,6 @@
 package com.junglesoftware.marketplace.common.response;
 
-import com.erac.services.restframework.domain.enumeration.ServiceStatusEnumeration;
-import com.erac.services.restframework.response.Message;
-import com.erac.services.restframework.response.MessageFactory;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -12,25 +10,11 @@ import lombok.Data;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
-/**
- * A common domain object all domain objects should implement.
- * <br>
- * <br>
- * NOTE: This class is only intended to be created inside the {@link com.erac.services.restframework.service.AbstractService#createResponse(T_Input)} method of 
- * a class extending {@link com.erac.services.restframework.service.AbstractService}. 
- * If not, the {@link #messageFactory} field will not be properly initialized, causing NullPointerExceptions in the {@link #addBusinessMessage} and {@link #addError} methods. 
- * Since children of this class are created with their constructors and not @Autowired, the messageFactory could not be @Autowired into this class without considerable additional 
- * coding in this class's constructor to grab it from the ApplicationContext upon initialization, which would cause more confusion than the current implementation. 
- * 
- * @see com.erac.services.restframework.service.AbstractService#createResponse(T_Input)
- */
 @Data
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @ToString(
