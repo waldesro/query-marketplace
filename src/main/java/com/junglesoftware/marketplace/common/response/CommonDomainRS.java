@@ -10,9 +10,11 @@ import lombok.Data;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 @Data

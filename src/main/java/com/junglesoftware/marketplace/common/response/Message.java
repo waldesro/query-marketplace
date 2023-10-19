@@ -2,6 +2,8 @@ package com.junglesoftware.marketplace.common.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.junglesoftware.marketplace.common.CommonErrors;
+import com.junglesoftware.marketplace.common.request.RequestContext;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;

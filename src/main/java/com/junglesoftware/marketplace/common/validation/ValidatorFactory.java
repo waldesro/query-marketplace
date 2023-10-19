@@ -1,8 +1,7 @@
 package com.junglesoftware.marketplace.common.validation;
 
-import com.erac.services.restframework.validation.Severity.WARNING;
 import lombok.experimental.UtilityClass;
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.metadata.ConstraintDescriptor;
@@ -37,7 +36,7 @@ public final class ValidatorFactory {
       payloadSet = descriptor.getPayload();
     }
     if (CollectionUtils.isNotEmpty(payloadSet)) {
-      return payloadSet.contains(WARNING.class);
+      return payloadSet.contains(Severity.WARNING.class);
     }
     return false;
   }
