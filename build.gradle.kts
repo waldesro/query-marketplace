@@ -11,6 +11,9 @@ version = "0.0.1-SNAPSHOT"
 java {
 	sourceCompatibility = JavaVersion.VERSION_17
 }
+//springBoot {
+//	mainClass.set("com.junglesoftware.marketplace.QueryMarketplaceApplication")
+//}
 
 configurations {
 	compileOnly {
@@ -30,6 +33,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
+	implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
 	implementation("org.projectlombok:lombok:1.18.26")
 	implementation("io.swagger.core.v3:swagger-core:2.2.8")
 	implementation("io.swagger.parser.v3:swagger-parser:2.1.14")
@@ -62,11 +66,20 @@ tasks.openApiGenerate() {
 	outputDir.set("$buildDir/generated")
 	configFile.set("$projectDir/src/main/specifications/query-marketplace-config.json")
 	//templateDir.set("$projectDir/src/main/specifications/templates")
+
 }
 
-tasks.compileJava {
+tasks.register("bootRunLocal") {
+	group = "application"
+	description = "Runs application with local profile"
 	dependsOn(tasks.clean)
 	dependsOn(tasks.openApiGenerate)
+	doFirst{
+		tasks.bootRun.configure{
+			systemProperty("spring.profiles.active", "int")
+		}
+	}
+	finalizedBy("bootRun")
 }
 
 sourceSets {

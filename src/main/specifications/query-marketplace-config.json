@@ -11,10 +11,10 @@
   "generatorLanguage": "Java",
   "generatorType": "SERVER",
   "useBeanValidationWithLombok": false,
-  "defaultInterfaces": true,
+  "defaultInterfaces": false,
   "useBeanValidation": true,
   "useResponseEntity": false,
-  "implicitHeaders": false,
+  "implicitHeaders": true,
   "useTags": false,
   "useValidated": true,
   "generateApiDocumentation": false,
@@ -23,7 +23,7 @@
   "requestMappingMode": "none",
   "useSpringBoot3": true,
   "useSpringController": true,
-  "openApiNullable": true,
+  "openApiNullable": false,
   "performBeanValidation": true,
   "booleanGetterPrefix": "is"
 }

@@ -17,39 +17,19 @@ servers:
           - uat
   - url: 'https://junglesoftware.com'
     description: Production
+security:
+  - OAuth2:
+      - query-marketplace:read
+      - query-Marketplace:write
 paths:
-  /authorization/v1/authorizeClient:
-    parameters:
-      - $ref: '#/components/parameters/Registration-Key'
-    post:
-      tags:
-        - authorizeClient
-      summary: authenticate user
-      operationId: authorizeClient
-      description: Authorize user to the marketplace
-      responses:
-        200:
-          $ref: '#/components/responses/200-Authorized'
-        400:
-          $ref: '#/components/responses/400-BadRequest'
-        401:
-          $ref: '#/components/responses/401-Unauthorized'
-        404:
-          $ref: '#/components/responses/404-UserNotFound'
-        405:
-          $ref: '#/components/responses/405-InvalidAccountInfo'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AuthorizationRequest'
-        description: User to authenticate
-  /authorization/v1/createAccount:
+  /account/v1/createAccount:
     post:
       tags:
         - createAccount
       summary: Create Account
+      security:
+        - OAuth2:
+            - query-Marketplace:write
       operationId: createAccount
       description: Create Account with required data
       responses:
@@ -72,10 +52,11 @@ paths:
       tags:
         - ListAllQueries
       summary: Return list of queries available for the software
+      security:
+        - OAuth2:
+            - query-marketplace:read
       description: Return a list with all queries for a given software
       operationId: listAllQueries
-      security:
-        - ApiKeyAuth: []
       responses:
         200:
           $ref: '#/components/responses/200-ListAllQueries'
@@ -83,18 +64,17 @@ paths:
           $ref: '#/components/responses/404-ApplicationNotFound'
 components:
   securitySchemes:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: X-API-KEY
+    OAuth2:
+      type: oauth2
+      description: This API uses OAuth 2 with the explicit grant flow
+      flows:
+        authorizationCode:
+          tokenUrl: http://localhost:8080
+          authorizationUrl: http://localhost:8080
+          scopes:
+            query-marketplace:read: Read operation
+            query-Marketplace:write: Write operation
   parameters:
-    Registration-Key:
-      name: Registration-Key
-      description: 'Client Registration key'
-      in: header
-      required: true
-      schema:
-        type: string
     SoftwareId:
       name: softwareId
       in: path
@@ -104,40 +84,6 @@ components:
         type: string
         format: uuid
   schemas:
-    AuthorizationRequest:
-      type: object
-      required:
-        - email
-        - password
-      properties:
-        email:
-          type: string
-          format: email
-          example: user_mail@somedomain.com
-        password:
-          type: string
-          format: password
-          example: abc123
-    AuthorizationResponse:
-      type: object
-      required:
-        - authorizationKey
-        - authorizedTimestamp
-      allOf:
-        - '#/components/schemas/CommonDomainRS'
-      properties:
-        authorizationKey:
-          type: string
-        authorizedTimestamp:
-          type: string
-          format: date-time
-          example: '2023-12-31T01:00:00.00Z'
-    CommonDomainRQ:
-      type: object
-      description: Request Context object.
-    CommonDomainRS:
-      type: object
-      description: A common domain object all domain Response objects should implement.
     ErrorsDTO:
       type: object
       required:
@@ -174,8 +120,6 @@ components:
     QueryDetailsDTO:
       type: object
       description: List of query detail
-      allOf:
-        - '#/components/schemas/CommonDomainRS'
       properties:
         queries:
           type: array
@@ -274,8 +218,6 @@ components:
           description: Date and Time of review
     AccountInfoRequest:
       type: object
-      allOf:
-        - $ref: '#/components/schemas/CommonDomainRQ'
       properties:
         accountInfo:
           $ref: '#/components/schemas/AccountInfoDTO'
@@ -286,7 +228,7 @@ components:
         - user
         - password
         - name
-        - software
+        - softwareId
         - countryISO
       properties:
         user:
@@ -300,24 +242,17 @@ components:
         name:
           type: string
           description: Full name
-        software:
+        softwareId:
           type: string
+          format: uuid
           description: Software used for ERP
-          enum:
-            - MONICA
         countryISO:
           type: string
-          description: Country 3 digits ISO code
+          description: Country ISO3 code
           maxLength: 3
           minLength: 3
           example: USA
   responses:
-    200-Authorized:
-      description: User was Authorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/AuthorizationResponse'
     200-AccountCreated:
       description: Account was successfully created
     200-ListAllQueries:
@@ -326,12 +261,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/QueryDetailsDTO'
-    404-UserNotFound:
-      description: User account not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorsDTO'
     405-InvalidAccountInfo:
       description: Invalid account information
       content:
