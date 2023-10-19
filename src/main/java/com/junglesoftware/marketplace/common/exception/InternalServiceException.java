@@ -1,6 +1,6 @@
 package com.junglesoftware.marketplace.common.exception;
 
-import com.erac.services.restframework.domain.enumeration.ServiceStatusEnumeration;
+import com.junglesoftware.marketplace.common.response.ServiceStatusEnumeration;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

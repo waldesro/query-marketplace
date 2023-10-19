@@ -1,6 +1,6 @@
 package com.junglesoftware.marketplace.common.exception;
 
-import com.erac.services.restframework.response.Message;
+import com.junglesoftware.marketplace.common.response.Message;
 
 import java.util.List;
 
