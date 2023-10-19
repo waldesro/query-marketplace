@@ -1,4 +1,4 @@
-package com.junglesoftware.marketplace;
+package com.junglesoftware.marketplace.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.Map;
 
 @Controller
-public class AppErrorController implements ErrorController {
+public class DefaultErrorController implements ErrorController {
 
     /**
      * Error Attributes in the Application
@@ -29,7 +29,7 @@ public class AppErrorController implements ErrorController {
      * Controller for the Error Controller
      * @param errorAttributes
      */
-    public AppErrorController(ErrorAttributes errorAttributes) {
+    public DefaultErrorController(ErrorAttributes errorAttributes) {
         this.errorAttributes = errorAttributes;
     }
 
@@ -40,7 +40,7 @@ public class AppErrorController implements ErrorController {
      */
     @RequestMapping(value = ERROR_PATH, produces = "text/html")
     public ModelAndView errorHtml(HttpServletRequest request) {
-        return new ModelAndView("/errors/errorView", getErrorAttributes(request, ErrorAttributeOptions.of(ErrorAttributeOptions.Include.EXCEPTION)));
+        return new ModelAndView("/errorView", getErrorAttributes(request, ErrorAttributeOptions.of(ErrorAttributeOptions.Include.EXCEPTION)));
     }
 
     /**
@@ -53,7 +53,7 @@ public class AppErrorController implements ErrorController {
     public ResponseEntity<Map<String, Object>> error(HttpServletRequest request) {
         Map<String, Object> body = getErrorAttributes(request, getTraceParameter(request));
         HttpStatus status = getStatus(request);
-        return new ResponseEntity<Map<String, Object>>(body, status);
+        return new ResponseEntity<>(body, status);
     }
 
     /**
@@ -81,13 +81,12 @@ public class AppErrorController implements ErrorController {
     }
 
     private HttpStatus getStatus(HttpServletRequest request) {
-        Integer statusCode = (Integer) request
-                .getAttribute("javax.servlet.error.status_code");
+        Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
         if (statusCode != null) {
             try {
                 return HttpStatus.valueOf(statusCode);
             }
-            catch (Exception ex) {
+            catch (Exception ignored) {
             }
         }
         return HttpStatus.INTERNAL_SERVER_ERROR;

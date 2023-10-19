@@ -28,9 +28,5 @@ spring:
 #Server settings
 server:
   servlet:
-    context-path: /marketplace
+    context-path: /api
     display-name: <a href='/safari'>Query Marketplace API</a>
-
-openapi:
-  queryMarketplace:
-    base-path: /marketplace
