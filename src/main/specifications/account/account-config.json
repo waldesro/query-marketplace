@@ -1,0 +1,33 @@
+{
+  "modelPackage": "com.junglesoftware.marketplace.dto.account",
+  "apiPackage": "com.junglesoftware.marketplace.api.account",
+  "invokerPackage": "com.junglesoftware.marketplace.api.account",
+  "basePackage": "com.junglesoftware.marketplace",
+  "library": "spring-boot",
+  "delegatePattern": true,
+  "serializableModel": true,
+  "interfaceOnly": false,
+  "unhandledException": true,
+  "generatorLanguage": "Java",
+  "generatorType": "SERVER",
+  "useBeanValidationWithLombok": false,
+  "defaultInterfaces": false,
+  "useBeanValidation": true,
+  "useResponseEntity": false,
+  "implicitHeaders": true,
+  "useTags": false,
+  "useValidated": true,
+  "generateApiDocumentation": true,
+  "generateHeaders": true,
+  "modelDocs": true,
+  "requestMappingMode": "none",
+  "useSpringBoot3": true,
+  "useSpringController": true,
+  "openApiNullable": false,
+  "performBeanValidation": true,
+  "booleanGetterPrefix": "is",
+  "importMappings": {
+    "CommonDomainRQ": "com.junglesoftware.marketplace.common.request.CommonDomainRQ",
+    "CommonDomainRS": "com.junglesoftware.marketplace.common.response.CommonDomainRS"
+  }
+}

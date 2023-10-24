@@ -1,0 +1,231 @@
+openapi: 3.0.3
+info:
+  #  description: Query Marketplace
+  version: "1.0.0"
+  title: Query Marketplace
+  contact:
+    name: Walter de Sola
+    email: waldesro@gmail.com
+servers:
+  - url: 'http://{environment}.junglesoftware.com'
+    description: Non-Production
+    variables:
+      environment:
+        default: int
+        enum:
+          - int
+          - uat
+  - url: 'https://junglesoftware.com'
+    description: Production
+security:
+  - OAuth2:
+      - query-marketplace:read
+      - query-Marketplace:write
+paths:
+  /query/v1/listAll/{softwareId}:
+    parameters:
+      - $ref: '#/components/parameters/SoftwareId'
+    get:
+      tags:
+        - ListAllQueries
+      summary: Return list of queries available for the software
+      security:
+        - OAuth2:
+            - query-marketplace:read
+      description: Return a list with all queries for a given software
+      operationId: listAllQueries
+      responses:
+        200:
+          $ref: '#/components/responses/200-ListAllQueries'
+        404:
+          $ref: '#/components/responses/404-ApplicationNotFound'
+components:
+    securitySchemes:
+      OAuth2:
+        type: oauth2
+        description: This API uses OAuth 2 with the explicit grant flow
+        flows:
+          authorizationCode:
+            tokenUrl: http://localhost:8080
+            authorizationUrl: http://localhost:8080
+            scopes:
+              query-marketplace:read: Read operation
+              query-Marketplace:write: Write operation
+    parameters:
+      SoftwareId:
+        name: softwareId
+        in: path
+        description: Software Id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    schemas:
+      QueryDetailsDTO:
+        type: object
+        description: List of query detail
+        properties:
+          queries:
+            type: array
+            items:
+              $ref: '#/components/schemas/QueryDetailDTO'
+      QueryDetailDTO:
+        type: object
+        description: Query detail
+        required:
+          - id
+          - shortDescription
+        properties:
+          id:
+            type: string
+            format: uuid
+            description: Query UUID
+          shortDescription:
+            type: string
+            description: A short description about the query
+            example: Account balance
+          longDescription:
+            type: string
+            description: Long description
+            example: This query provides detail of each account and the balance
+          price:
+            type: number
+            description: Query price in USA dollars
+            example: 1.99
+            format: double
+          purchased:
+            type: boolean
+            description: Boolean indicating if the query was already purchased by the account
+            example: true
+          author:
+            $ref: '#/components/schemas/AuthorDTO'
+      AuthorDTO:
+        type: object
+        description: Query Author
+        required:
+          - id
+          - name
+        properties:
+          id:
+            type: string
+            format: uuid
+            description: Author Id
+          name:
+            type: string
+            description: Author name
+          photo:
+            type: string
+            description: Path to photo
+          detail:
+            type: string
+            description: Detail information about author
+          profileLink:
+            type: string
+            description: Link to author profile
+          numberOfQueries:
+            type: integer
+            description: Number of queries that author has
+          overallReviewRate:
+            type: number
+            format: float
+            description: Rate author has based on users reviews
+            example: 4.5
+          reviews:
+            type: array
+            description: List of reviews
+            items:
+              $ref: '#/components/schemas/AuthorReviewDTO'
+      AuthorReviewDTO:
+        type: object
+        description: Author review
+        required:
+          - id
+          - reviewComment
+          - rate
+          - date
+        properties:
+          id:
+            type: string
+            format: uuid
+            description: Review Id
+          reviewComment:
+            type: string
+            description: Review comments
+          rate:
+            type: number
+            description: Rate
+            format: float
+            example: 4.5
+          date:
+            type: string
+            format: date-time
+            description: Date and Time of review
+      Errors:
+        type: object
+        required:
+          - errors
+        properties:
+          errors:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+      Error:
+        type: object
+        description: A single error in the API response
+        required:
+          - code
+          - locale
+          - message
+          - severity
+        properties:
+          code:
+            type: string
+            description: A unique ID for the particular error
+            example: QMP-A-0001
+          locale:
+            type: string
+            description: The locale of the translation used for the message in ISO3 format
+            example: es-ESP
+          message:
+            type: string
+            description: Error detail
+            example: Message example for UI feedback
+          severity:
+            type: string
+            description: The severity of the error
+            enum:
+              - INFO
+              - WARNING
+              - ERROR
+            example: ERROR
+      CommonDomainRS:
+        type: object
+        description: Common object response
+      CommonDomainRQ:
+        type: object
+        description: Common object request
+    responses:
+      200-ListAllQueries:
+        description: List of all queries
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryDetailsDTO'
+      404-ApplicationNotFound:
+        description: Application ID not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Errors'
+      400-BadRequest:
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Errors'
+      401-Unauthorized:
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'

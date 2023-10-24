@@ -1,5 +1,7 @@
 package com.junglesoftware.marketplace.common.validation.validator;
 
+import com.junglesoftware.marketplace.common.validation.annotation.EnumerationValidation;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.Arrays;

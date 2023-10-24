@@ -4,7 +4,9 @@ import com.junglesoftware.marketplace.common.request.CommonDomainRQ;
 import com.junglesoftware.marketplace.common.request.RequestContext;
 import com.junglesoftware.marketplace.common.response.CommonDomainRS;
 import com.junglesoftware.marketplace.common.response.MessageFactory;
+import com.junglesoftware.marketplace.common.response.MessageProcessor;
 import com.junglesoftware.marketplace.common.validation.ValidatorFactory;
+import jakarta.validation.groups.Default;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.Advised;
 import org.springframework.aop.support.AopUtils;
@@ -26,12 +28,20 @@ public abstract class AbstractService <T_INPUT extends CommonDomainRQ, T_OUTPUT 
     @Autowired
     private Validator validator;
     @Autowired
-    private MessageProcess
+    private MessageProcessor messageProcessor;
 
-    public final T_OUTPUT process(T_INPUT request, HttpServletResponse servletResponse) throws Exception {
+    public final T_OUTPUT process(T_INPUT request) throws Exception {
         populateRequestContext(request);
         T_OUTPUT response = initializeResponse(request);
-
+        if (response.isValid()) {
+            response = preProcessRequest(request, response);
+            if (response.isValid()) {
+                response = performBusinessLogic(request, response);
+                if (response.isValid()) {
+                    response = postProcessResponse(request, response);
+                }
+            }
+        }
         return response;
     }
 
@@ -46,9 +56,30 @@ public abstract class AbstractService <T_INPUT extends CommonDomainRQ, T_OUTPUT 
     public T_OUTPUT validateRequest(T_INPUT request, T_OUTPUT response, Class<?>... validationGroups) {
         Set<ConstraintViolation<T_INPUT>> violations = validator.validate(request, validationGroups);
         Set<ConstraintViolation<T_INPUT>> warnings = ValidatorFactory.extractWarnings(violations);
-        response.addBusinessMessage(me);
+        response.addBusinessMessages(messageProcessor.process(violations, warnings));
+        return response;
     }
 
+    public T_OUTPUT validateResponse(T_OUTPUT response, Class<?>... validationGroups) {
+        Set<ConstraintViolation<T_OUTPUT>> violations = validator.validate(response, validationGroups);
+        Set<ConstraintViolation<T_OUTPUT>> warnings = ValidatorFactory.extractWarnings(violations);
+        response.addBusinessMessages(messageProcessor.process(violations, warnings));
+        return response;
+    }
+
+    protected T_OUTPUT preProcessRequest(T_INPUT request, T_OUTPUT response) throws Exception {
+        validateRequest(request, response, Default.class);
+        return response;
+    }
+
+    protected T_OUTPUT performBusinessLogic(T_INPUT request, T_OUTPUT response) throws Exception {
+        return response;
+    }
+
+    protected T_OUTPUT postProcessResponse(T_INPUT request, T_OUTPUT response) throws Exception {
+        validateResponse(response, Default.class);
+        return response;
+    }
     private void populateRequestContext(T_INPUT request) {
         if (AopUtils.isAopProxy(requestContext) && requestContext instanceof Advised advised) {
             try {

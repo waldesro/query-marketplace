@@ -11,7 +11,6 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,27 +28,14 @@ public abstract class CommonDomainRS {
   private MessageFactory messageFactory;
 
   @JsonIgnore
-  private boolean inBody = false;
-
-  public static final String BUSINESS_MESSAGES_HEADER_FIELD = "Ehi-Messages";
-  public static final String RESPONSE_HEADER_ETAG = "Etag";
+  private boolean inBody;
 
   @JsonFormat
   @JsonIgnore
   private List<Message> businessMessages;
 
   @ApiModelProperty(
-      dataType = "java.lang.String",
-      required = false,
-      name = BUSINESS_MESSAGES_HEADER_FIELD,
-      value =
-          "Response Header Field : Business messages; encoded value of JSON text. Used when the request is successful and the response entity body may contain the result of the request."
-  )
-  @JsonIgnore
-  private String etag;
-
-  @ApiModelProperty(
-      dataType = "com.erac.services.restframework.response.Message[]",
+      dataType = "com.junglesoftware.marketplace.common.response.Message[]",
       required = false,
       name = "messages",
       value =
@@ -193,7 +179,4 @@ public abstract class CommonDomainRS {
     return false;
   }
 
-  public boolean hasETag() {
-    return StringUtils.isNotEmpty(etag);
-  }
 }

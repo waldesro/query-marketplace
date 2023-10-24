@@ -1,7 +1,7 @@
 package com.junglesoftware.marketplace.common.validation.validator;
 
-import com.erac.services.restframework.validation.ValidatableEnum;
-import com.erac.services.restframework.validation.annotation.EnumerationValidation;
+import com.junglesoftware.marketplace.common.validation.ValidatableEnum;
+import com.junglesoftware.marketplace.common.validation.annotation.EnumerationValidation;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

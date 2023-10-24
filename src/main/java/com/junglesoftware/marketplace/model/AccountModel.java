@@ -18,7 +18,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @Table(name = "User")
-public class UserModel {
+public class AccountModel {
 
   @Id
   @GeneratedValue
@@ -28,15 +28,10 @@ public class UserModel {
   @Column(name = "email")
   private String email;
 
-  @Column(name = "password")
-  private String password;
-
   @Column(name = "name")
   private String name;
 
   @Column(name = "countryISO3")
   private String countryISO3;
 
-  @Column(name = "registerCode")
-  private String registerCode;
 }

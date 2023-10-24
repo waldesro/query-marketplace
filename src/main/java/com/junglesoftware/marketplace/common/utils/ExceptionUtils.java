@@ -1,7 +1,7 @@
 package com.junglesoftware.marketplace.common.utils;
 
-import com.erac.services.restframework.response.Message;
-import com.erac.services.restframework.response.MessageFactory;
+import com.junglesoftware.marketplace.common.response.Message;
+import com.junglesoftware.marketplace.common.response.MessageFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

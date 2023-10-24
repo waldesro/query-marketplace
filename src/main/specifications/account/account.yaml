@@ -1,0 +1,243 @@
+openapi: 3.0.3
+info:
+  #  description: Query Marketplace
+  version: "1.0.0"
+  title: Query Marketplace
+  contact:
+    name: Walter de Sola
+    email: waldesro@gmail.com
+servers:
+  - url: 'http://{environment}.junglesoftware.com'
+    description: Non-Production
+    variables:
+      environment:
+        default: int
+        enum:
+          - int
+          - uat
+  - url: 'https://junglesoftware.com'
+    description: Production
+security:
+  - OAuth2:
+    - query-marketplace:read
+    - query-Marketplace:write
+paths:
+  /account/v1/create:
+    post:
+      tags:
+        - createAccount
+      summary: Create Account
+      security:
+        - OAuth2:
+            - query-Marketplace:write
+      operationId: createAccount
+      description: Create Account with required data
+      responses:
+        200:
+          $ref: '#/components/responses/200-AccountCreated'
+        402:
+          $ref: '#/components/responses/402-AccountExists'
+        405:
+          $ref: '#/components/responses/405-InvalidAccountInfo'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAccountRequest'
+  /account/v1/delete/{AccountId}:
+    post:
+      tags:
+        - deleteAccount
+      operationId: deleteAccount
+      summary: Delete Account
+      security:
+        - OAuth2:
+            - query-Marketplace:write
+      description: Delete given account
+      responses:
+        200:
+          $ref: '#/components/responses/200-AccountDeleted'
+        402:
+          $ref: '#/components/responses/402-AccountDoesNotExist'
+        405:
+          $ref: '#/components/responses/405-InvalidAccountInfo'
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+components:
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: This API uses OAuth 2 with the explicit grant flow
+      flows:
+        authorizationCode:
+          tokenUrl: http://localhost:8080
+          authorizationUrl: http://localhost:8080
+          scopes:
+            query-marketplace:read: Read operation
+            query-Marketplace:write: Write operation
+  schemas:
+    CreateAccountRequest:
+      allOf:
+        - $ref: '#/components/schemas/CommonDomainRQ'
+      type: object
+      properties:
+        accountInfo:
+          $ref: '#/components/schemas/AccountDTO'
+      required:
+        - accountInfo
+    AccountDTO:
+      type: object
+      description: Information about the account
+      required:
+        - user
+        - name
+      properties:
+        user:
+          type: string
+          format: (?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])
+          description: User email
+        name:
+          type: string
+          description: Full name
+        softwareId:
+          type: string
+          format: uuid
+          description: Software used for ERP
+        countryISO:
+          type: string
+          description: Country ISO3 code
+          maxLength: 3
+          minLength: 3
+          example: USA
+    CreateAccountResponse:
+      description: Response with the common attributes
+      allOf:
+        - $ref: '#/components/schemas/CommonDomainRS'
+      type: object
+      properties:
+        accountKey:
+          type: string
+          description: Unique account Key
+      required:
+        - accountKey
+    DeleteAccountResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CommonDomainRS'
+      description: Delete response result
+      properties:
+        message:
+          type: string
+          description: Any response message
+    Errors:
+      type: object
+      required:
+        - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    Error:
+      type: object
+      description: A single error in the API response
+      required:
+        - code
+        - locale
+        - message
+        - severity
+      properties:
+        code:
+          type: string
+          description: A unique ID for the particular error
+          example: QMP-A-0001
+        locale:
+          type: string
+          description: The locale of the translation used for the message in ISO3 format
+          example: es-ESP
+        message:
+          type: string
+          description: Error detail
+          example: Message example for UI feedback
+        severity:
+          type: string
+          description: The severity of the error
+          enum:
+            - INFO
+            - WARNING
+            - ERROR
+          example: ERROR
+    CommonDomainRS:
+      discriminator:
+        propertyName: commonDomainRSType
+        mapping:
+          CreateAccountResponse: '#/components/schemas/CreateAccountResponse'
+          DeleteAccountResponse: '#/components/schemas/DeleteAccountResponse'
+      type: object
+      description: Common object response
+    CommonDomainRQ:
+      discriminator:
+        propertyName: commonDomainRQType
+        mapping:
+          CreateAccountRequest: '#/components/schemas/CreateAccountRequest'
+      type: object
+      description: Common object request
+  responses:
+    200-AccountCreated:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateAccountResponse'
+      description: Account created response object
+    200-AccountDeleted:
+      description: Account delete response object
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DeleteAccountResponse'
+    405-InvalidAccountInfo:
+      description: Invalid account information
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+    402-AccountExists:
+      description: Account could not be created. Existing one
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+    402-AccountDoesNotExist:
+      description: Account does not Exist
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+    404-ApplicationNotFound:
+      description: Application ID not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+    400-BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+    401-Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+  parameters:
+    AccountId:
+      in: path
+      name: accountId
+      description: Account ID
+      required: true
+      schema:
+        type: string
+        format: uuid

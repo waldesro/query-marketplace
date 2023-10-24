@@ -62,9 +62,9 @@ tasks.withType<Test> {
 
 tasks.openApiGenerate() {
 	generatorName.set("spring")
-	inputSpec.set("$projectDir/src/main/specifications/query-marketplace.yaml")
+	inputSpec.set("$projectDir/src/main/specifications/account/account.yaml")
 	outputDir.set("$buildDir/generated")
-	configFile.set("$projectDir/src/main/specifications/query-marketplace-config.json")
+	configFile.set("$projectDir/src/main/specifications/account/account-config.json")
 	//templateDir.set("$projectDir/src/main/specifications/templates")
 
 }
@@ -85,7 +85,7 @@ tasks.register("bootRunLocal") {
 sourceSets {
 	main {
 		java {
-			srcDir("$buildDir/generated/src/main/java")
+			srcDirs("$buildDir/generated/src/main/java", "com.junglesoftware.marketplace.common")
 		}
 	}
 }

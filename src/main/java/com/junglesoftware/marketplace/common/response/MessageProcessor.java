@@ -1,6 +1,8 @@
 package com.junglesoftware.marketplace.common.response;
 
 import com.junglesoftware.marketplace.common.exception.ValidationException;
+import com.junglesoftware.marketplace.common.utils.ExceptionUtils;
+import com.junglesoftware.marketplace.common.validation.Severity;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,8 +22,7 @@ public class MessageProcessor {
   @Autowired
   private MessageFactory messageFactory;
 
-  public <T> List<Message> process(Set<ConstraintViolation<T>> violations,
-      Set<ConstraintViolation<T>> warnings) throws ValidationException {
+  public <T> List<Message> process(Set<ConstraintViolation<T>> violations, Set<ConstraintViolation<T>> warnings) throws ValidationException {
 
     List<Message> messages = processConstraintSet(warnings);
 
@@ -49,9 +50,7 @@ public class MessageProcessor {
     if(violation.getPropertyPath() != null) {
       message.setPath(violation.getPropertyPath().toString());
     }
-    if (message instanceof MessageV1_1) {
-      message.setSeverity(getViolationSeverity(violation));
-    }
+    message.setSeverity(getViolationSeverity(violation));
     return message;
   }
   
